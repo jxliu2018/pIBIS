@@ -1,1 +1,2 @@
 This folder contains pIBIS related documentations and publications.
+If you have a basic laptop, you can run pIBIS!
