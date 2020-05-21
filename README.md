@@ -1,12 +1,14 @@
 # pIBIS - parallel Integrated Biosphere Simulator
 
-This is the parallel IBIS program that runs on Argonne ALCF Theta.
+This is the parallel IBIS program that runs on Argonne ALCF Mira/Theta.
 IBIS core FORTRAN code is used to generate a library file (libibis.a).
 IBIS parallel program (pibis_p_cray) is written in C, which calls the ibis library.
 
 Parameter files include:
 paramsx.can, paramsx.crp, paramsx.dis, paramsx.ghg, paramsx.luc,
 paramsx.map, paramsx.scl, paramsx.soi, paramsx.veg
+
+Each sub-folder has a brief Readme file to explain some details.
 
 The IBIS version (2.5) Foley (1996) is archived in https://daac.ornl.gov/cgi-bin/dsviewer.pl?ds_id=808.
 For model equations, check journal publications:
