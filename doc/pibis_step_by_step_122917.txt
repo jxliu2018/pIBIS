@@ -1,0 +1,223 @@
+This is a step-by-step of pIBIS model setup on a laptop.
+
+Dec 29 2017
+
+Jinxun Liu, USGS western Geographic Science Center 
+jxliu@usgs.gov
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Netbook
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Laptop	--	Compaq CQ10-405DX,
+
+Linux	--	Fedora LXDE 27
+
+MEM	--	2 GB
+Storage --	500 TGB
+CPU	--	2 processors, Intel Atom
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Needed Packages
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C,C++	--	/usr/lib64/ccache/gcc
+FORTRAN	--	/usr/bin/gfortran
+F77	--	/usr/lib64/ccache/g77
+
+OpenMPI --	/usr/lib64/openmpi/bin/mpirun
+		/usr/lib64/openmpi/bin/mpicc
+
+Netcdf	--	/home/jxliu/netcdf363/
+	--	/home/jxliu/netcdf4211/
+
+pNetcdf	--	/home/jxliu/PnetCDF/
+
+NCView	--	/usr/bin/ncview
+
+pIBIS	--	/home/jxliu/Research/pibis_pnetcdf/
+
+DDD	--	debugger
+
+-- Package Installations:
+su
+dnf update
+dnf groupinstall 'Development Tools'
+dnf groupinstall 'C Development Tools and Libraries'
+dnf install gcc-gfortran
+dnf install openmpi
+dnf install openmpi openmpi-devel
+dnf install compat-gcc-34-g77.x86_64
+dnf install ddd
+dnf install ncview
+dnf install libcurl-devel
+
+--shell update
+cd ~/
+vi .bash_profile
+
+(insert several lines:)
+PATH=$PATH:/usr/lib64/openmpi/bin
+PATH=$PATH:./
+PATH=$HOME/PnetCDF/bin:$PATH
+LD_LIBRARY_PATH=$PATH:/sur/local/lib
+export LD_LIBRARY_PATH
+(wq)
+
+source .bash_profile
+
+--Install netCDF3.6.3:
+cd /home/jxliu/
+tar -xzf netcdf363.tar.gz
+
+--Install parallel netCDF:
+dnf install m4
+mkdir /home/jxliu/PnetCDF
+./configure --prefix=$HOME/PnetCDF
+make
+make install
+
+--Install netCDF4:
+    1 $ # Build libcurl
+    2 $ cd /home/jxliu/Extracts/curl-7.57.0
+    3 $ ./configure # default dir is /usr/local
+    4 $ make check
+    5 $ sudo make install
+
+    1 $ # Build and install zlib
+    2 $ cd /home/jxliu/Extracts/zlib-1.2.11
+    2 $ ZDIR=/usr/local
+    3 $ ./configure --prefix=${ZDIR}
+    4 $ make check
+    5 $ sudo make install   # or sudo make install, if root permissions required
+
+    1 $ # Build and install HDF5
+        (CC=mpicc)
+    2 $ cd /home/jxliu/Extracts/hdf5-1.8.20
+    2 $ H5DIR=/usr/local
+    3 $ ./configure --with-zlib=${ZDIR} --prefix=${H5DIR} --disable-shared --disable-largefile --enable-parallel 
+    4 $ make check
+    5 $ sudo make install   # or sudo make install, if root permissions required
+
+    1 $ # Build and install netCDF-4.5.0
+    2 $ cd /home/jxliu/Extracts/netcdf-c-4.5.0
+    2 $ NCDIR=/home/jxliu/netcdf450 #NCDIR=/usr/local
+    3 $ CPPFLAGS=-I${H5DIR}/include LDFLAGS=-L${H5DIR}/lib ./configure --prefix=${NCDIR}
+    4 $ (./configure --disable-netcdf-4 --prefix=/home/jxliu/netcdf4211)
+    4 $ make check
+    5 $ sudo make install  # or sudo make install
+
+    1 $ # Build and install netCDF-4.2.1.1
+    2 $ cd /home/jxliu/Extracts/netcdf-4.2.1.1
+    4 $ ./configure --disable-netcdf-4 --prefix=/home/jxliu/netcdf4211
+    4 $ make check
+    5 $ make install
+
+    6 $ goto NetCDF4211 Fortran directory (netcdf-fortran-4.2)
+    7 $ export LD_LIBRARY_PATH=/home/jxliu/netcdf4211/lib:${LD_LIBRARY_PATH}
+    8 $ CPPFLAGS=-I/home/jxliu/netcdf4211/include LDFLAGS=-L/home/jxliu/netcdf4211/lib .
+        /configure --prefix=/home/jxliu/netcdf4211 CC=gcc FC=gfortran
+    9 $ make check 
+    10 $ make install
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+pIBIS direcories in Fedora 27
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Data	--	CA_clip_122917.tar.gz
+Code	--	pibis_pnetcdf_CA_122917.tar.gz
+
+Input	--	/home/jxliu/data/CA_clip_122917/
+Work_Dir--	/home/jxliu/Research/pibis_pnetcdf/
+C_code	--	/home/jxliu/Research/pibis_pnetcdf/
+F_code	--	/home/jxliu/Research/pibis_pnetcdf/ibis/
+Extra code --   /home/jxliu/Research/pibis_pnetcdf/extra
+
+--pIBIS instalation
+cd ~/
+mkdir Research
+mv pibis_pnetcdf_CA_122917.tar.gz ./Research/
+cd Research
+tar -xzf pibis_pnetcdf_CA_122917.tar.gz
+mv pibis_pnetcdf_CA_122917 pibis_pnetcdf
+
+cd ~/
+mkdir data
+mv CA_clip_122917.tar.gz ./data/
+cd data
+tar -xzf CA_clip_122917.tar.gz
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Compile/Run at working directory
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+cd ~/Research/pibis_pnetcdf
+rm input
+ln -s /home/jxliu/data/CA_clip_122917 input
+
+cd ibis
+compile_gfortran_savebin.rc		!compile ibis fortran code
+make_lib_savebin.rc			!build libibis.a for mpi use
+
+cd /home/jxliu/Research/pibis_pnetcdf
+x0.rc					!build parallel pibis program0
+x1.rc					!build parallel pibis program1
+
+vi ibis.infile				!modify simulation spec (if needed):
+					!region size,time,sampling
+
+x0					!generate 5 input netcdf files
+mpirun -np 10 x1			!run 10 pibis in working directory
+
+invert.sh				!convert outfiles to dat files
+run_Dat2NC_x_local.40.sh		!convert dat files to netcdf files
+
+ncview aynpptot.nc			!check if NPP looks OK, netcdf file
+rm1.sh					!clean folder, remove nc and dat files
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Compile/Run large region (onily works on DOE MIRA)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+make_pnetcdf_p.rc			!build pibis on MIRA
+
+vi p_list_sub_region_N_blocks_comp.asc	!modify large region spec:
+					!decide region size, max ranks, etc.
+
+seg_p_1-32.rc				!divide large region to small windows
+					!each can be up to 1000 row by 1000 col
+					!if npoi=10, then 1 window uses 100k cores
+
+cd /home/jxliu/Research/xibis1
+submit_pibis.sh				!use this on Mira/Vesta
+
+cd /home/jxliu/Research/xibis2
+submit_pibis.sh				!use this on Mara/Vesta
+
+cd /home/jxliu/Research/pibis_pnetcdf
+
+run_invert.sh				!outfile to dat conversion
+run_Dat2NC.sh				!dat to netcdf conversion
+
+vi p_list_sub_region_N_blocks_merge_comp.asc
+					!edit to merge windows 
+
+run_merge_avar40_alcf.sh		!merge into whole region
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Notes
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1. assume each pibis segment has 10 land cells. They can be
+   1 vegetation cell and 9 non-vegetation, at least one veg.
+   If no valid vegetated land cell, the segment is invalid.
+   For example, a 40x40 window can be a 10x10 actual window
+   if we use do sampling every 4 row 4 column. If each pibis 
+   simulates 10 land cells, we can have 10 pibis. But actual
+   valid segment can be smaller than 10, if many non-
+   vegetaiton are present.
+
+2. when doing a large region, need to make sure the column
+   numbers can be evenly divided by aXb, where
+   a=10, is npoi, the number land cells each pibis simulates;
+   b=4, is the spatial sampling interval.
+   So, the colums of the window can be 40, 400, 40800, etc...
+
+3. segment comp and merge are mainly done on ALCF Mira/Vesta
+   need to change on different machines. C code included.
+
