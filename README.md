@@ -21,4 +21,4 @@ For model equations, check journal publications:
 
 --For questions, please send Email to jxliu@usgs.gov--
 
-Latest update: added the "pibis_CA_package.011322.tar.gz" in the data folder, a real California data/model set with a step-by-step guide to run on a Linux laptop with four physical CPUs.
+Latest update: added the "pibis_CA_package.011322.tar.gz" in the data folder, a real 1-km California data/model set with a step-by-step guide to run on a Linux laptop with four physical CPUs.
