@@ -20,3 +20,5 @@ For model equations, check journal publications:
 3. Liu J, Price DT, Chen J. Nitrogen controls on ecosystem carbon sequestration: a model implementation and application to Saskatchewan, Canada. Ecol Model. 2005;186:178–95.
 
 --For questions, please send Email to jxliu@usgs.gov--
+
+Latest update: added the "pibis_CA_package.011322.tar.gz" in the data folder, a real California data/model set with a step-by-step guide to run on a Linux laptop with four physical CPUs.
