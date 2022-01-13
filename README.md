@@ -1,6 +1,6 @@
 # pIBIS - parallel Integrated Biosphere Simulator
 
-This is the parallel IBIS program that runs on Argonne ALCF Mira/Theta.
+This is the parallel IBIS program that runs on PC, as well as super computer like the Argonne ALCF Mira/Theta.
 IBIS core FORTRAN code is used to generate a library file (libibis.a).
 IBIS parallel program (pibis_p_cray) is written in C, which calls the ibis library.
 
