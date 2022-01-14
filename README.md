@@ -1,14 +1,8 @@
 # pIBIS - parallel Integrated Biosphere Simulator
 
-This is the parallel IBIS program that runs on PC, as well as super computer like the Argonne ALCF Mira/Theta.
-IBIS core FORTRAN code is used to generate a library file (libibis.a).
-IBIS parallel program (pibis_p_cray) is written in C, which calls the ibis library.
+The parallel IBIS program can run on PCs and super computers (e.g. Argonne ALCF Mira/Theta). IBIS FORTRAN code is used to generate a library file (libibis.a). IBIS parallel program (pibis) is written in C, which calls the libibis.a.
 
-Parameter files include:
-paramsx.can, paramsx.crp, paramsx.dis, paramsx.ghg, paramsx.luc,
-paramsx.map, paramsx.scl, paramsx.soi, paramsx.veg
-
-Each sub-folder has a brief Readme file to explain some details.
+The "pibis_CA_package.011322.tar.gz" in the data folder a real 1-km California data/model set with a step-by-step guide. You can run it on a Linux laptop with 4 physical CPUs if you choose very coarse spatial sampling. Pre- and post-prossessing programs are also included so you can analyze your results in many ways. And, You can publish your study with this model/dataset! 
 
 The IBIS version (2.5) Foley (1996) is archived in https://daac.ornl.gov/cgi-bin/dsviewer.pl?ds_id=808.
 For model equations, check journal publications:
@@ -19,6 +13,4 @@ For model equations, check journal publications:
 
 3. Liu J, Price DT, Chen J. Nitrogen controls on ecosystem carbon sequestration: a model implementation and application to Saskatchewan, Canada. Ecol Model. 2005;186:178–95.
 
---For questions, please send Email to jxliu@usgs.gov--
-
-Latest update: added the "pibis_CA_package.011322.tar.gz" in the data folder, a real 1-km California data/model set with a step-by-step guide to run on a Linux laptop with four physical CPUs.
+--For questions on pIBIS package, please send Email to jxliu@usgs.gov--
