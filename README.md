@@ -4,6 +4,8 @@ The parallel IBIS program can run on PCs and super computers (e.g. Argonne ALCF 
 
 The "pibis_CA_package.011322.tar.gz" in the data folder a real 1-km California data/model set with a step-by-step guide. You can run it on a Linux laptop with 4 physical CPUs if you choose very coarse spatial sampling. Pre- and post-prossessing programs are also included so you can analyze your results in many ways. And, You can publish your study with this model/dataset! 
 
+1-km California map is  1261 rows by 747 columns. Run pibis with coarse spatial sampling (e.g. 37km by 37km) on a laptop with 4 cpus will finish in an hour. The output map is 30 row by 20 col. Of course if you want to do a 1km California simulation, you need to run the model on a super computer. The code here can use 100,000 cores on ALCF Theta
+
 The IBIS version (2.5) Foley (1996) is archived in https://daac.ornl.gov/cgi-bin/dsviewer.pl?ds_id=808.
 For model equations, check journal publications:
 
