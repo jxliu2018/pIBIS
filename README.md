@@ -2,7 +2,7 @@
 
 This parallel IBIS program can run on PCs and super computers (e.g. Argonne ALCF Mira/Theta). IBIS FORTRAN code is used to generate a library file (libibis.a). IBIS parallel program (pibis) is written in C, which calls the libibis.a.
 
-The "pibis_CA_package.011322.tar.gz" in the data folder is a real 1km California model/dataset with a step-by-step guide. You can run it on a Linux laptop with 4 physical CPUs if you choose very coarse spatial sampling. Some pre- and post-prossessing programs are also included so you can analyze your results in many ways. And, You can publish your study with this model/dataset! (Please check/use the latest pibis code pibis_CA_local_011522.tar.gz and lenovo_process.txt.)
+The "pibis_CA_package.011322.tar.gz" in the data folder is a real 1km California model/dataset with a step-by-step guide. You can run it on a Linux laptop with 4 physical CPUs if you choose very coarse spatial sampling. Some pre- and post-prossessing programs are also included so you can analyze your results in many ways. And, You can publish your study with this model/dataset! (Please check/use the latest pibis code pibis_CA_local_011522.tar.gz and lenovo_process.txt in the gz.)
 
 The 1km California map is 1261 rows by 747 columns. Run pibis with coarse spatial sampling (e.g. 37km by 37km) on a laptop with 4 cpus will finish in an hour. The output maps are 30 rows by 20 columns. If you want to do a 1km California simulation, you need to run the model on a super computer. The code here can use 100,000 cores on ALCF Theta
 
